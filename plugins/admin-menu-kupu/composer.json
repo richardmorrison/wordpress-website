@@ -1,0 +1,17 @@
+{
+  "name": "richard/admin-menu-kupu",
+  "description": "Admin Menu Kupu (Māori Labels) — overlay Māori labels in wp-admin with original on hover.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpcompatibility/php-compatibility": "^9.3",
+    "wp-coding-standards/wpcs": "^3.0"
+  },
+  "scripts": {
+    "lint": "phpcs --standard=phpcs.xml.dist ."
+  },
+  "extra": {
+    "phpcodesniffer-search-depth": 5
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "menus": {
+    "Dashboard": "Papatohu",
+    "Posts": "Tuhinga",
+    "Media": "Pāpāho",
+    "Pages": "Whārangi",
+    "Comments": "Tākupu",
+    "Appearance": "Āhua",
+    "Plugins": "Mono (kōwhiringa)",
+    "Users": "Kaiwhakamahi",
+    "Tools": "Utauta",
+    "Settings": "Tautuhinga",
+    "Updates": "Whakahōu",
+    "Profile": "Kōtaha"
+  },
+  "submenus": {
+    "All Posts": "Ngā Tuhinga Katoa",
+    "Add New": "Tāpiri Hou",
+    "Categories": "Ngā Kāwai",
+    "Tags": "Ngā Tohu",
+    "Themes": "Ngā Kaupapa",
+    "Menus": "Ngā Tahua",
+    "Theme File Editor": "Etita Kōnae Kaupapa"
+  },
+  "headers": {
+    "Dashboard": "Papatohu",
+    "Posts": "Tuhinga",
+    "Media": "Pāpāho",
+    "Pages": "Whārangi",
+    "Comments": "Tākupu",
+    "Settings": "Tautuhinga"
+  }
+}

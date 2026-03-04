@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "telex/block-eyes-follow-cursor",
+  "version": "0.1.0",
+  "title": "Eyes Follow Cursor",
+  "category": "widgets",
+  "icon": "visibility",
+  "description": "An interactive block with eyes that follow your cursor and occasionally wink",
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": true
+  },
+  "textdomain": "eyes-follow-cursor",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

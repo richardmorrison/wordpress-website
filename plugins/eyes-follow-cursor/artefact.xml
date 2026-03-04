@@ -1,0 +1,477 @@
+<?xml version="1.0"?><artefact xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="artefact.xsd" name="Eyes Follow Cursor" slug="eyes-follow-cursor" type="code-package" schemaVersion="2">
+  <file path="readme.txt">
+    <description>This file contains the readme information for the block. It is used to provide information about the block, its usage, and any other relevant details.</description>
+    <content><![CDATA[
+=== Eyes Follow Cursor ===
+
+Contributors:      WordPress Telex
+Tags:              block, interactive, animation, eyes, cursor
+Tested up to:      6.8
+Stable tag:        0.1.0
+License:           GPLv2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+
+An interactive block that displays a pair of eyes that follow your cursor around the screen and occasionally wink at you.
+
+== Description ==
+
+The Eyes Follow Cursor block adds a delightful interactive element to your website. A pair of animated eyes will track the user's mouse movements across the screen, creating an engaging and playful experience. The eyes will also randomly wink at the cursor, adding personality to your site.
+
+Perfect for:
+* Personal blogs and portfolios
+* Creative agency websites
+* Entertainment and gaming sites
+* Any site looking to add interactive personality
+
+The block is fully responsive and works smoothly across all devices with pointer input.
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/eyes-follow-cursor` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Add the "Eyes Follow Cursor" block to any page or post using the block editor
+
+== Frequently Asked Questions ==
+
+= Does this work on mobile devices? =
+
+The eyes will follow touch interactions on mobile devices. The winking animation works on all devices.
+
+= Can I customize the appearance of the eyes? =
+
+Currently, the block uses a default eye design. Future versions may include customization options.
+
+= Does this affect page performance? =
+
+The block is optimized for performance and uses requestAnimationFrame for smooth animations without impacting page load times.
+
+== Screenshots ==
+
+1. The eyes following cursor movement
+2. Eyes winking animation
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial release
+* Eyes follow cursor movement
+* Random winking animation
+* Smooth animations using CSS transforms
+]]></content>
+  </file>
+  <file path="eyes-follow-cursor.php">
+    <description>This file contains the block registration code in the form of a single block plugin. Any other plugin related functionality should be added to this file. All block rendering functionality should go to the `render.php` file.</description>
+    <content><![CDATA[<?php
+/**
+ * Plugin Name:       Eyes Follow Cursor
+ * Description:       An interactive block that displays a pair of eyes that follow your cursor around the screen and occasionally wink at you.
+ * Version:           0.1.0
+ * Requires at least: 6.1
+ * Requires PHP:      7.0
+ * Author:            WordPress Telex
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       eyes-follow-cursor
+ *
+ * @package EyesFollowCursor
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
+ * Registers the block using the metadata loaded from the `block.json` file.
+ * Behind the scenes, it registers also all assets so they can be enqueued
+ * through the block editor in the corresponding context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ */
+function eyes_follow_cursor_block_init() {
+	register_block_type( __DIR__ . '/build/' );
+}
+add_action( 'init', 'eyes_follow_cursor_block_init' );
+]]></content>
+  </file>
+  <file path="src/block.json">
+    <description>This file contains metadata about the block including its name, title, category, icon, and other properties.</description>
+    <content><![CDATA[
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "telex/block-eyes-follow-cursor",
+	"version": "0.1.0",
+	"title": "Eyes Follow Cursor",
+	"category": "widgets",
+	"icon": "visibility",
+	"description": "An interactive block with eyes that follow your cursor and occasionally wink",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": true
+	},
+	"textdomain": "eyes-follow-cursor",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}
+]]></content>
+  </file>
+  <file path="src/index.js">
+    <description>This file registers the block, specifies the edit and save functions, and loads the block's metadata</description>
+    <content><![CDATA[
+/**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+import { registerBlockType } from '@wordpress/blocks';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import save from './save';
+import metadata from './block.json';
+
+/**
+ * Every block starts by registering a new block type definition.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+registerBlockType( metadata.name, {
+	/**
+	 * @see ./edit.js
+	 */
+	edit: Edit,
+
+	/**
+	 * @see ./save.js
+	 */
+	save,
+} );
+]]></content>
+  </file>
+  <file path="src/edit.js">
+    <description>This file contains the edit function for the block which is responsible for rendering the block in the editor.</description>
+    <content><![CDATA[
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ */
+import { useBlockProps } from '@wordpress/block-editor';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './editor.scss';
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {Element} Element to render.
+ */
+export default function Edit() {
+	return (
+		<div { ...useBlockProps() }>
+			<div className="eyes-container">
+				<div className="eye">
+					<div className="eyeball">
+						<div className="pupil"></div>
+					</div>
+				</div>
+				<div className="eye">
+					<div className="eyeball">
+						<div className="pupil"></div>
+					</div>
+				</div>
+			</div>
+			<p className="eyes-preview-note">
+				{ __( '👁️ Eyes will follow cursor on the front end', 'eyes-follow-cursor' ) }
+			</p>
+		</div>
+	);
+}
+]]></content>
+  </file>
+  <file path="src/save.js">
+    <description>This file contains the save function for the block which is responsible for creating the static result of rendering the block on the client to display the saved result on the front end.</description>
+    <content><![CDATA[
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ */
+import { useBlockProps } from '@wordpress/block-editor';
+
+/**
+ * The save function defines the way in which the different attributes should
+ * be combined into the final markup, which is then serialized by the block
+ * editor into `post_content`.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
+ *
+ * @return {Element} Element to render.
+ */
+export default function save() {
+	return (
+		<div { ...useBlockProps.save() }>
+			<div className="eyes-container">
+				<div className="eye">
+					<div className="eyeball">
+						<div className="pupil"></div>
+					</div>
+					<div className="eyelid"></div>
+				</div>
+				<div className="eye">
+					<div className="eyeball">
+						<div className="pupil"></div>
+					</div>
+					<div className="eyelid"></div>
+				</div>
+			</div>
+		</div>
+	);
+}
+]]></content>
+  </file>
+  <file path="src/style.scss">
+    <description>This file contains styles for the block in the front end.</description>
+    <content><![CDATA[
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-telex-block-eyes-follow-cursor {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 20px;
+	min-height: 200px;
+}
+
+.eyes-container {
+	display: flex;
+	gap: 40px;
+	align-items: center;
+	justify-content: center;
+}
+
+.eye {
+	position: relative;
+	width: 120px;
+	height: 120px;
+	background: white;
+	border-radius: 50%;
+	border: 3px solid #333;
+	overflow: hidden;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.eyeball {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pupil {
+	width: 40px;
+	height: 40px;
+	background: #333;
+	border-radius: 50%;
+	position: relative;
+	transition: transform 0.1s ease-out;
+}
+
+.pupil::after {
+	content: '';
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	background: white;
+	border-radius: 50%;
+	top: 8px;
+	left: 8px;
+}
+
+.eyelid {
+	position: absolute;
+	top: -100%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: inherit;
+	border-radius: 50%;
+	border: 3px solid #333;
+	transition: top 0.2s ease-in-out;
+	z-index: 10;
+}
+
+.eye.winking .eyelid {
+	top: 0;
+}
+
+@media (max-width: 768px) {
+	.eye {
+		width: 80px;
+		height: 80px;
+	}
+
+	.pupil {
+		width: 28px;
+		height: 28px;
+	}
+
+	.pupil::after {
+		width: 8px;
+		height: 8px;
+		top: 6px;
+		left: 6px;
+	}
+
+	.eyes-container {
+		gap: 30px;
+	}
+}
+]]></content>
+  </file>
+  <file path="src/editor.scss">
+    <description>This file contains styles for the block in the editor.</description>
+    <content><![CDATA[
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-telex-block-eyes-follow-cursor {
+	.eyes-preview-note {
+		text-align: center;
+		margin-top: 20px;
+		color: #666;
+		font-size: 14px;
+		font-style: italic;
+	}
+}
+]]></content>
+  </file>
+  <file path="src/view.js">
+    <description>This file contains the view function for the block which is responsible for rendering interactive behaviors of the block on the front end.</description>
+    <content><![CDATA[
+/**
+ * Use this file for JavaScript code that you want to run in the front-end
+ * on posts/pages that contain this block.
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+	const blocks = document.querySelectorAll('.wp-block-telex-block-eyes-follow-cursor');
+	
+	blocks.forEach(function(block) {
+		const eyes = block.querySelectorAll('.eye');
+		const pupils = block.querySelectorAll('.pupil');
+		
+		// Track mouse movement
+		function handleMouseMove(event) {
+			const mouseX = event.clientX;
+			const mouseY = event.clientY;
+			
+			pupils.forEach(function(pupil) {
+				const eye = pupil.closest('.eye');
+				const eyeRect = eye.getBoundingClientRect();
+				const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+				const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+				
+				// Calculate angle between eye center and mouse
+				const deltaX = mouseX - eyeCenterX;
+				const deltaY = mouseY - eyeCenterY;
+				const angle = Math.atan2(deltaY, deltaX);
+				
+				// Maximum distance pupil can move (radius of eye minus radius of pupil)
+				const maxDistance = 30;
+				
+				// Calculate distance but cap it at maxDistance
+				const distance = Math.min(
+					maxDistance,
+					Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 10
+				);
+				
+				// Calculate pupil position
+				const pupilX = Math.cos(angle) * distance;
+				const pupilY = Math.sin(angle) * distance;
+				
+				// Apply transform
+				pupil.style.transform = 'translate(' + pupilX + 'px, ' + pupilY + 'px)';
+			});
+		}
+		
+		// Random winking
+		function randomWink() {
+			// Random interval between 3-8 seconds
+			const nextWink = Math.random() * 5000 + 3000;
+			
+			setTimeout(function() {
+				// Randomly choose left eye (0) or right eye (1) or both (2)
+				const whichEye = Math.floor(Math.random() * 3);
+				
+				if (whichEye === 0 || whichEye === 2) {
+					eyes[0].classList.add('winking');
+					setTimeout(function() {
+						eyes[0].classList.remove('winking');
+					}, 200);
+				}
+				
+				if (whichEye === 1 || whichEye === 2) {
+					eyes[1].classList.add('winking');
+					setTimeout(function() {
+						eyes[1].classList.remove('winking');
+					}, 200);
+				}
+				
+				// Schedule next wink
+				randomWink();
+			}, nextWink);
+		}
+		
+		// Start tracking mouse
+		document.addEventListener('mousemove', handleMouseMove);
+		
+		// Start random winking
+		randomWink();
+	});
+});
+]]></content>
+  </file>
+  
+</artefact>

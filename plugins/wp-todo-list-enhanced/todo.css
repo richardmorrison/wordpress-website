@@ -1,0 +1,74 @@
+#wp-todo {
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+#todo-list, #completed-list {
+  list-style: none;
+  padding: 0;
+}
+
+#todo-list li, #completed-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9f9f9;
+  margin-bottom: 5px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#todo-list li.important {
+  background: #fffbe6;
+  font-weight: bold;
+}
+
+#todo-list li:first-child {
+  border-left: 4px solid #0073aa;
+}
+
+#todo-list .text,
+#completed-list .text {
+  flex: 1;
+  margin-left: 10px;
+}
+
+#completed-list .text.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+#todo-input {
+  width: 70%;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+#add-todo {
+  padding: 9px 15px;
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+button.delete, button.flag {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+button.flag {
+  color: orange;
+}
+
+button.delete {
+  color: red;
+}
+
+h2, h3 {
+  margin-top: 30px;
+}
+
+/* TO-DO: Add nested task indentation, timestamp gradient fade, and detail toggles */

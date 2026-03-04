@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="PHPCompatibility">
+    <description>Check PHP 7.4+ compatibility</description>
+    <rule ref="PHPCompatibility"/>
+    <config name="testVersion" value="7.4-"/>
+    <file>.</file>
+</ruleset>

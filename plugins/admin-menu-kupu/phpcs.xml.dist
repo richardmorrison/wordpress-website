@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="Admin Menu Kupu">
+    <description>WordPress Coding Standards for the Admin Menu Kupu plugin.</description>
+    <rule ref="WordPress"/>
+    <rule ref="WordPress-Docs"/>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>*.zip</exclude-pattern>
+    <file>.</file>
+</ruleset>

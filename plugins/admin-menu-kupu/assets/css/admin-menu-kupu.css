@@ -1,0 +1,40 @@
+/* Admin Menu Kupu — minimal tooltip styles (admin only) */
+.amk-tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.amk-tooltip [data-amk-tip] {
+  position: absolute;
+  z-index: 100000;
+  left: 0;
+  top: 100%;
+  font-size: 12px;
+  line-height: 1.2;
+  background: #1d2327;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  transform: translateY(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .12s ease, transform .12s ease, visibility .12s;
+  white-space: nowrap;
+}
+
+.amk-tooltip:focus [data-amk-tip],
+.amk-tooltip:hover [data-amk-tip] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amk-tooltip [data-amk-tip] {
+    transition: none;
+  }
+}
+
+/* Body class used for JS toggle */
+body.amk-enabled .wp-menu-name { /* no-op, reserved for future */ }
